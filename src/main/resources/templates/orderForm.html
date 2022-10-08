@@ -26,8 +26,7 @@
     <input type="text" th:field="*{name}"/>
     <span class="validationError"
           th:if="${#fields.hasErrors('name')}"
-          th:errors="*{name}"
-    th:color="">Name Error</span>
+          th:errors="*{name}">Name Error</span>
     <br/>
 
     <label for="street">Street address: </label>
