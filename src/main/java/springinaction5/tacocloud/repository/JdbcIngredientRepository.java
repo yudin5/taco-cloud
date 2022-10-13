@@ -1,8 +1,9 @@
-package springinaction5.tacocloud;
+package springinaction5.tacocloud.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import springinaction5.tacocloud.domain.Ingredient;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 @Repository
 public class JdbcIngredientRepository implements IngredientRepository {
 
-    private JdbcTemplate jdbc;
+    private final JdbcTemplate jdbc;
 
     @Autowired
     public JdbcIngredientRepository(JdbcTemplate jdbc) {
@@ -24,7 +25,7 @@ public class JdbcIngredientRepository implements IngredientRepository {
     }
 
     @Override
-    public Ingredient findOne(String id) {
+    public Ingredient findById(String id) {
         return jdbc.queryForObject(
                 "select id, name, type from Ingredient where id=?",
                 this::mapRowToIngredient, id);

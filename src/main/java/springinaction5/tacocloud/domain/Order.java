@@ -1,4 +1,4 @@
-package springinaction5.tacocloud;
+package springinaction5.tacocloud.domain;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;

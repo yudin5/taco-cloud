@@ -1,4 +1,4 @@
-package springinaction5.tacocloud;
+package springinaction5.tacocloud.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import springinaction5.tacocloud.Ingredient.Type;
+import springinaction5.tacocloud.domain.Ingredient;
+import springinaction5.tacocloud.domain.Ingredient.Type;
+import springinaction5.tacocloud.domain.Taco;
+import springinaction5.tacocloud.repository.IngredientRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,16 @@ import java.util.stream.Collectors;
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
+
+//    @ModelAttribute(name = "order")
+//    public Order order() {
+//        return new Order();
+//    }
+//
+//    @ModelAttribute(name = "taco")
+//    public Taco taco() {
+//        return new Taco();
+//    }
 
     @Autowired
     public DesignTacoController(IngredientRepository ingredientRepo) {
@@ -55,6 +67,7 @@ public class DesignTacoController {
 
         List<Ingredient> ingredients = new ArrayList<>();
         ingredientRepo.findAll().forEach(ingredients::add);
+
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
@@ -62,13 +75,23 @@ public class DesignTacoController {
         }
         model.addAttribute("design", new Taco());
         return "design";
-
     }
 
     @PostMapping
-    public String processDesign(@Valid Taco design, Errors errors) {
+    public String processDesign(@Valid Taco design, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
+            log.info("Ошибки: {}", errors);
+
+            // В случае ошибок перерисовываем дизайн
+            List<Ingredient> ingredients = new ArrayList<>();
+            ingredientRepo.findAll().forEach(ingredients::add);
+
+            Type[] types = Ingredient.Type.values();
+            for (Type x : types) {
+                model.addAttribute(x.toString().toLowerCase(),
+                        ingredients.stream().filter(p -> p.getType().equals(x)).collect(Collectors.toList()));
+            }
             return "design";
         }
 
