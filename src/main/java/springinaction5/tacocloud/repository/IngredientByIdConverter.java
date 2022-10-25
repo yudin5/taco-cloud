@@ -2,6 +2,7 @@ package springinaction5.tacocloud.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import springinaction5.tacocloud.domain.Ingredient;
 
@@ -17,7 +18,10 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
     }
 
     @Override
-    public Ingredient convert(String id) {
+    public Ingredient convert(@Nullable String id) {
+        if (id == null) {
+            return null;
+        }
         return ingredientRepo.findById(id);
     }
 
