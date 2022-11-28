@@ -1,4 +1,4 @@
-package springinaction5.tacocloud.repository;
+package springinaction5.tacocloud.repository.jdbc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class JdbcOrderRepository implements OrderRepository{
+public class JdbcOrderRepository {
 
     private SimpleJdbcInsert orderInserter;
     private SimpleJdbcInsert orderTacoInserter;
@@ -30,7 +30,7 @@ public class JdbcOrderRepository implements OrderRepository{
         this.objectMapper = new ObjectMapper();
     }
 
-    @Override
+//    @Override
     public Order save(Order order) {
         order.setPlacedAt(new Date());
         long orderId = saveOrderDetails(order);
@@ -47,11 +47,9 @@ public class JdbcOrderRepository implements OrderRepository{
         Map<String, Object> values =
                 objectMapper.convertValue(order, Map.class);
         values.put("placedAt", order.getPlacedAt());
-        long orderId =
-                orderInserter
-                        .executeAndReturnKey(values)
-                        .longValue();
-        return orderId;
+        return orderInserter
+                .executeAndReturnKey(values)
+                .longValue();
     }
 
     private void saveTacoToOrder(Taco taco, long orderId) {

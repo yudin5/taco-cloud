@@ -1,4 +1,4 @@
-package springinaction5.tacocloud.repository;
+package springinaction5.tacocloud.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Repository
-public class JdbcTacoRepository implements TacoRepository {
+public class JdbcTacoRepository {
 
     private final JdbcTemplate jdbc;
 
@@ -25,7 +25,7 @@ public class JdbcTacoRepository implements TacoRepository {
         this.jdbc = jdbc;
     }
 
-    @Override
+//    @Override
     public Taco save(Taco taco) {
         long tacoId = saveTacoInfo(taco);
         taco.setId(tacoId);

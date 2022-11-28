@@ -22,7 +22,7 @@ public class IngredientByIdConverter implements Converter<String, Ingredient> {
         if (id == null) {
             return null;
         }
-        return ingredientRepo.findById(id);
+        return ingredientRepo.findById(id).orElseThrow(() -> new RuntimeException(String.format("Ингридиент с id = %s на найден", id)));
     }
 
 }
